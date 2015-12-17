@@ -331,15 +331,20 @@ namespace xgboost{
             }
         private:
             void Dump( int nid, FILE *fo, const utils::FeatMap& fmap, int depth, bool with_stats ){
-                for( int  i = 0;  i < depth; ++ i ){
-                    fprintf( fo, "\t" );
+//                for( int  i = 0;  i < depth; ++ i ){
+//                    fprintf( fo, "\t" );
+//                }
+                if(depth == 0){
+                    fprintf(fo, "#\n");
                 }
                 if( nodes[ nid ].is_leaf() ){
-                    fprintf( fo, "%d:leaf=%f ", nid, nodes[ nid ].leaf_value() );
+                    //fprintf( fo, "%d:leaf=%f ", nid, nodes[ nid ].leaf_value() );
+                    fprintf( fo, "%d:leaf\t%f", nid, nodes[ nid ].leaf_value() );
                     if( with_stats ){
                         stat( nid ).Print( fo, true );
                     }
-                    fprintf( fo, "\n" );
+                    fprintf(fo, "\n");
+                    //fprintf( fo, "\n" );
                 }else{
                     // right then left,
                     TSplitCond cond = nodes[ nid ].split_cond();
@@ -349,9 +354,13 @@ namespace xgboost{
                         switch( fmap.type(split_index) ){
                         case utils::FeatMap::kIndicator:{
                             int nyes = nodes[ nid ].default_left()?nodes[nid].cright():nodes[nid].cleft();
+                            fprintf(fo, "%d:%d\t%d\t%d", nid, split_index, nyes, 
+                                    nodes[nid].cdefault());
+                            /*
                             fprintf( fo, "%d:[%s] yes=%d,no=%d", 
                                      nid, fmap.name( split_index ),
                                      nyes, nodes[nid].cdefault() );
+                            */
                             break;                            
                         }
                         case utils::FeatMap::kInteger:{
@@ -372,10 +381,15 @@ namespace xgboost{
                         default: utils::Error("unknown fmap type");
                         }
                     }else{
-                        fprintf( fo, "%d:[f%u<%f] yes=%d,no=%d,missing=%d", 
-                                 nid, split_index, float(cond), 
-                                 nodes[ nid ].cleft(), nodes[ nid ].cright(),
-                                 nodes[ nid ].cdefault() );
+                        fprintf( fo, "-1\t%d\t%u\t%f\t%d\t%d\t%d\n", nid, split_index, 
+                                float(cond), nodes[ nid ].cleft(), 
+                                nodes[ nid ].cright(), 
+                                nodes[ nid ].cdefault());
+
+//                        fprintf( fo, "%d:[f%u<%f] yes=%d,no=%d,missing=%d", 
+//                                 nid, split_index, float(cond), 
+//                                 nodes[ nid ].cleft(), nodes[ nid ].cright(),
+//                                 nodes[ nid ].cdefault() );
                     }
                     if( with_stats ){
                         fprintf( fo, " ");

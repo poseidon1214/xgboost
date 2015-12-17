@@ -1,11 +1,13 @@
 #ifndef XGBOOST_GBMBASE_H
 #define XGBOOST_GBMBASE_H
 
+
 #include <cstring>
 #include "xgboost.h"
 #include "xgboost_data.h"
 #include "../utils/xgboost_omp.h"
 #include "../utils/xgboost_config.h"
+
 /*!
  * \file xgboost_gbmbase.h
  * \brief a base model class,
@@ -143,8 +145,9 @@ namespace xgboost{
              * \param with_stats whether print statistics
              */
             inline void DumpModel(FILE *fo, const utils::FeatMap& fmap, bool with_stats){
+                fprintf(fo, "%d\n", (int)boosters.size());
                 for (size_t i = 0; i < boosters.size(); i++){
-                    fprintf(fo, "booster[%d]\n", (int)i);
+                    //fprintf(fo, "booster[%d]\n", (int)i);
                     boosters[i]->DumpModel(fo, fmap, with_stats);
                 }
             }

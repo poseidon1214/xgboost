@@ -7,9 +7,11 @@
  *
  * Use standard PRNG from stdlib
  */
+
 #include <cmath>
 #include <cstdlib>
 #include <vector>
+
 
 #ifdef _MSC_VER
 typedef unsigned char uint8_t;

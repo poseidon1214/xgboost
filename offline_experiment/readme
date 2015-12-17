@@ -1,0 +1,8 @@
+featmap.txt 
+    训练数据的特征映射，i表示bool特征
+dump.raw.txt
+    训练出的模型，第一行是树的个数
+gbdt_model.py
+    训练gbdt模型
+gbdt_to_lr_fea.py
+    利用训练好的gbdt模型，将gbdt特征转化成lr特征形式
